@@ -162,7 +162,7 @@
                         <p class="right-package-txt">请选择特惠套餐</p>
                         <div class="right-package-button1 active">
                             <p class="right-package-first" title="优惠套餐">优惠套餐</p>
-                            <div class="price">
+                            <div class="price1">
                                 ¥<span>1317.00</span>
                                 <em>省¥140.00</em>
                             </div>
@@ -170,7 +170,7 @@
                         <div class="right-package-button2">
                             <p class="right-package-first" title="单机">单机</p>
                             <div class="price">
-                                <span>¥1088.00</span>
+                                ¥<span>999</span>
                             </div>
                         </div>
                         <div class="right-package-box">
@@ -186,11 +186,12 @@
 
                     <script>
 
-                        var price = $('.price').eq(1).find('span').text()
+                        var price = $('.price1').find('span').text()
+                        console.log(price)
                         var name = $('.right-price-win10').eq(0).text()
                         var imgurl = $('.half-imgTxt-left-imgDown').children().attr('src')
                         console.log(imgurl)
-                        var num = 1
+                        var num = 2
                         console.log(imgurl)
                         console.log(name)
                          $('.addToCart').click(function(){

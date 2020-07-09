@@ -30,7 +30,7 @@
 
                     <ul class="header-first-nav">
                         <li>
-                            <a href="#">
+                            <a href="./bought.html">
                                 <span>
                                     收藏夹
                                     <em class="icon-xiabiao"></em>
@@ -211,48 +211,141 @@
     <script> 
         $.get('../interface/showlist.php',function(data){
                 var json = JSON.parse(data);
+                console.log(json)
                 if(json.code==0){
                     alert('购物车里面空空的')
                 }else{
-                    console.log(json.data[0])
-                    console.log(json.data[0].product_name)
+                    // console.log(json)
+                    // console.log()
+                    // console.log(json.data[0])
+                    // console.log(json.data[0].product_name)
                     
-                    id = json.data[0].product_id
-                    name = json.data[0].product_name
-                    imgurl = json.data[0].product_img
-                    price = json.data[0].product_price
-                    num = json.data[0].product_num
+                    // id = json.data[0].product_id
+                    // name = json.data[0].product_name
+                    // imgurl = json.data[0].product_img
+                    // price = json.data[0].product_price
+                    // num = json.data[0].product_num
+                    // console.log(json.data)
+                    
+                    temp(json.data)
+                    add()
+                    cut()
                 }
+                del()
+            })
+            
 
+            
+
+            function temp (data){
+
+                // var mol = template('data',{"id":id,"name":name,"imgurl":imgurl,"price":price,"num":num,})
+                //     console.log(1)
+
+                // $('.cart-item').html(mol)
+                var html=''
+                var sum =0 - 0
+                var mmm = 0
+                for (let index = 0; index <data.length; index++) {
+                    
+                    id = data[index].product_id
+                    name = data[index].product_name
+                    imgurl = data[index].product_img
+                    price = data[index].product_price - 0
+                    num = data[index].product_num  - 0
+                    // console.log(num)
+                    // console.log(price)
+                    sum += num - 0
+                    mmm += num*price
+                     
                 var mol = template('data',{"id":id,"name":name,"imgurl":imgurl,"price":price,"num":num,})
-                console.log(1)
-                $('.cart-item').html(mol)
 
-                // var span = $('.cart-header').children().eq(0).find('span')
-                // span.html(num)
-                $('.cart-header').children().children().eq(0).children().text(num)
+                html+=mol
+
+                }
+                
+            $('.cart-item').html(html)
+            // console.log($('.cart-item'))
+            // console.log(html)
+            // console.log(mmm)
+                $('.cart-header').children().children().eq(0).children().text(sum)
          
 
-                $('.cart-header').children().children().eq(5).children().eq(0).text(num*price)
+                $('.cart-header').children().children().eq(5).children().eq(0).text(mmm)
                 
 
                 $('.cart-ft-right').children().children().eq(0).children().eq(0).text(num)
 
-                $('.cart-ft-right').children().children().eq(1).children().eq(0).text(num*price)
+                $('.cart-ft-right').children().children().eq(1).children().eq(0).text(mmm)
+            }
+
+            function del (){
+                    
+
+                $('.del').find('span').click(function(){
+                    var mm = $(this).parents('ul').attr('index')-0
+                    console.log(mm)
+                        
+                    $.get('../interface/delwq.php',{
+                        id:mm
+                    },
+                    function(data){
+                        var json = JSON.parse(data);
+                            if(json.code==1){
+
+                                location.reload(true)
+                            }
+                    })
+                })
+                }
+
+            function add (){
+                $('.add').click(function(){
+                    var that = this;
+                    
+                    var mm= $(this).parents('ul').attr('index')-0
+                    $.get('../interface/updatewq.php',{
+                        id:mm,
+                        type:'add'
+                    },function(data){
+                        
+                        var old = $(that).parent().children('i').text()-0
+                        $(that).parent().children('i').text(old+1)
+                        
+                        location.reload(true)
+                        
+                    })
+
+                })
+            }  
+
+            function cut (){
+                $('.cut').click(function(){
+                    var mm= $(this).parents('ul').attr('index')-0
+                    var that = this
 
 
-            })
-
+                    $.get('../interface/updatewq.php',{
+                        id:mm,
+                    },function(data){
+                        // console.log(data)
+                        location.reload(true)
+                        // var old = $(that).parent().find('i').text()-0
+                        // $(that).parent().find('i').text(old-1)
+                    })
+                    // console.log($(this))
+                })
+            }
             
     </script>
 
 <script type="text/template" id="data">
 
-    <ul>
+    <ul index="{{id}}">
         <li class="imgurl"><img src="{{imgurl}}jpg" alt="小口红"></li>
         <li class="name"><span>{{name}}</span></li>
         <li class="price"><span>{{price}}</span></li>
-        <li class="num"><span>{{num}}</span></li>
+        <li class="num"><span><button class="cut">-</button><i>{{num}}</i> <button class="add">+</button> </span></li>
         <li class="Tprice"><span>{{num*price}}</span></li>
         <li class="del"><span>删除</span></li>
     </ul>
